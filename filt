@@ -1,0 +1,33 @@
+import numpy as np
+from scipy.signal import butter, filtfilt
+import matplotlib.pyplot as plt
+from matplotlib.pylab import mpl
+mpl.rcParams['font.sans-serif'] = ['SimHei']   #显示中文
+mpl.rcParams['axes.unicode_minus']=False       #显示负号
+
+def lowpass_filter(signal, cutoff_frequency, fs):
+    # Design the filter
+    order = 4
+    nyq = 0.5 * fs
+    normal_cutoff = cutoff_frequency / nyq
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+
+    # Apply the filter to the signal
+    filtered_signal = filtfilt(b, a, signal)
+
+    return filtered_signal
+
+fs=5120
+file='有水3#15.TXT'
+y=np.loadtxt(file,skiprows=3)
+x=np.arange(0,1/fs,71680/fs)
+filtered_x = lowpass_filter(y,10,fs)
+
+
+
+plt.plot(y)   
+plt.show()
+
+
+plt.plot(filtered_x)   
+plt.show()
